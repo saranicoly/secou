@@ -1,8 +1,8 @@
 import googlemaps
 from elevationAPI import elevation, elevation_along_path  
+import os
 
-#minha key do google maps
-API_KEY = 'AIzaSyAtrWL526qq419xYcYGc0fXjcxCw_6OqUQ'
+API_KEY = os.environ['GCP_API_KEY']
 
 def test_elevation():
     client = googlemaps.Client(key=API_KEY)

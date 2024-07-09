@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from elevationAPI import elevation, elevation_along_path
 
 app = FastAPI()
 
