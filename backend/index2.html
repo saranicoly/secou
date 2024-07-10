@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Google Maps Demo</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=INSIRA_A_CHAVE_AQUI&callback=initMap" async defer></script>
+    <script>
+        var map;
+        var directionsService;
+        var directionsRenderer;
+
+        function initMap() {
+            // Localização inicial (por exemplo, São Paulo)
+            var location = {lat: -23.55052, lng: -46.633308};
+
+            // Cria o mapa centrado na localização inicial
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: location,
+                mapTypeControlOptions: {
+                    mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain', 'styled_map']
+                }
+            });
+
+            // Adiciona um marcador na localização inicial
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+
+            // Adiciona uma janela de informação
+            var infoWindow = new google.maps.InfoWindow({
+                content: '<h1>São Paulo</h1><p>Esta é uma descrição do local.</p>'
+            });
+
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });
+
+            // Estilo do mapa
+            var styledMapType = new google.maps.StyledMapType(
+                [
+                    {elementType: 'geometry', stylers: [{color: '#ebe3cd'}]},
+                    {elementType: 'labels.text.fill', stylers: [{color: '#523735'}]},
+                    {elementType: 'labels.text.stroke', stylers: [{color: '#f5f1e6'}]},
+                    {
+                        featureType: 'administrative',
+                        elementType: 'geometry.stroke',
+                        stylers: [{color: '#c9b2a6'}]
+                    },
+                    {
+                        featureType: 'administrative.land_parcel',
+                        elementType: 'geometry.stroke',
+                        stylers: [{color: '#dcd2be'}]
+                    },
+                    {
+                        featureType: 'administrative.land_parcel',
+                        elementType: 'labels.text.fill',
+                        stylers: [{color: '#ae9e90'}]
+                    },
+                    {
+                        featureType: 'landscape.natural',
+                        elementType: 'geometry',
+                        stylers: [{color: '#dfd2ae'}]
+                    },
+                    {
+                        featureType: 'poi',
+                        elementType: 'geometry',
+                        stylers: [{color: '#dfd2ae'}]
+                    },
+                    {
+                        featureType: 'poi',
+                        elementType: 'labels.text.fill',
+                        stylers: [{color: '#93817c'}]
+                    },
+                    {
+                        featureType: 'poi.park',
+                        elementType: 'geometry.fill',
+                        stylers: [{color: '#a5b076'}]
+                    },
+                    {
+                        featureType: 'poi.park',
+                        elementType: 'labels.text.fill',
+                        stylers: [{color: '#447530'}]
+                    },
+                    {
+                        featureType: 'road',
+                        elementType: 'geometry',
+                        stylers: [{color: '#f5f1e6'}]
+                    },
+                    {
+                        featureType: 'road.arterial',
+                        elementType: 'geometry',
+                        stylers: [{color: '#fdfcf8'}]
+                    },
+                    {
+                        featureType: 'road.highway',
+                        elementType: 'geometry',
+                        stylers: [{color: '#f8c967'}]
+                    },
+                    {
+                        featureType: 'road.highway',
+                        elementType: 'geometry.stroke',
+                        stylers: [{color: '#e9bc62'}]
+                    },
+                    {
+                        featureType: 'road.highway.controlled_access',
+                        elementType: 'geometry',
+                        stylers: [{color: '#e98d58'}]
+                    },
+                    {
+                        featureType: 'road.highway.controlled_access',
+                        elementType: 'geometry.stroke',
+                        stylers: [{color: '#db8555'}]
+                    },
+                    {
+                        featureType: 'road.local',
+                        elementType: 'labels.text.fill',
+                        stylers: [{color: '#806b63'}]
+                    },
+                    {
+                        featureType: 'transit.line',
+                        elementType: 'geometry',
+                        stylers: [{color: '#dfd2ae'}]
+                    },
+                    {
+                        featureType: 'transit.line',
+                        elementType: 'labels.text.fill',
+                        stylers: [{color: '#8f7d77'}]
+                    },
+                    {
+                        featureType: 'transit.line',
+                        elementType: 'labels.text.stroke',
+                        stylers: [{color: '#ebe3cd'}]
+                    },
+                    {
+                        featureType: 'transit.station',
+                        elementType: 'geometry',
+                        stylers: [{color: '#dfd2ae'}]
+                    },
+                    {
+                        featureType: 'water',
+                        elementType: 'geometry.fill',
+                        stylers: [{color: '#b9d3c2'}]
+                    },
+                    {
+                        featureType: 'water',
+                        elementType: 'labels.text.fill',
+                        stylers: [{color: '#92998d'}]
+                    }
+                ],
+                {name: 'Styled Map'}
+            );
+
+            map.mapTypes.set('styled_map', styledMapType);
+            map.setMapTypeId('styled_map');
+
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+        }
+
+        function calculateRoute() {
+            var start = document.getElementById('start').value;
+            var end = document.getElementById('end').value;
+
+            var request = {
+                origin: start,
+                destination: end,
+                travelMode: 'DRIVING'
+            };
+
+            directionsService.route(request, function(result, status) {
+                if (status == 'OK') {
+                    directionsRenderer.setDirections(result);
+                    displayRouteSteps(result);
+                } else {
+                    alert('Direções não encontradas: ' + status);
+                }
+            });
+        }
+
+        function displayRouteSteps(directionResult) {
+            var myRoute = directionResult.routes[0].legs[0];
+            var stepsList = document.getElementById('steps');
+            stepsList.innerHTML = '';
+
+            for (var i = 0; i < myRoute.steps.length; i++) {
+                var li = document.createElement('li');
+                li.innerHTML = myRoute.steps[i].instructions;
+                stepsList.appendChild(li);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h3>My Google Maps Demo</h3>
+    <div>
+        <label for="start">Origem: </label>
+        <input type="text" id="start" name="start">
+        <label for="end">Destino: </label>
+        <input type="text" id="end" name="end">
+        <button onclick="calculateRoute()">Calcular Rota</button>
+    </div>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    <h4>Passos da Rota:</h4>
+    <ul id="steps"></ul>
+</body>
+</html>
