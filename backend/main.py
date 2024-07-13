@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from elevationAPI import elevation, elevation_along_path
+#from elevationAPI import elevation, elevation_along_path
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI()
 
@@ -29,3 +30,14 @@ def process_text(request: TextRequest):
     input_text = request.text
     response_text = f"Você enviou: {input_text}"
     return TextResponse(response=response_text)
+
+
+@app.get("/api/google-maps-api-key")
+async def get_google_maps_api_key():
+    api_key = os.environ.get("GCP_KEY")
+    if api_key:
+        print(f"GCP_KEY found: {api_key}")
+        return {"apiKey": api_key}
+    else:
+        print("GCP_KEY not found or is None")
+        return {"apiKey": None}

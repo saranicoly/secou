@@ -1,18 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic App
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <ion-item>
-    <ion-label position="floating">Digite o texto</ion-label>
-    <ion-input [(ngModel)]="inputText"></ion-input>
-  </ion-item>
-  <ion-button expand="full" (click)="sendText()">Enviar</ion-button>
-  <ion-item>
-    <ion-label>{{ responseText }}</ion-label>
-  </ion-item>
+  <app-search-button></app-search-button> 
+  <div id="map" style="height: 100%;"></div>
 </ion-content>

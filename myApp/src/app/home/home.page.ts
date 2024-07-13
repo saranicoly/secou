@@ -1,31 +1,48 @@
-import { Component } from '@angular/core';
-import { ApiService } from '../services/api.service'; // Importe o serviço que você criou
+import { Component, OnInit } from '@angular/core';
+import { Geolocation } from '@capacitor/geolocation';
+import { GoogleMapsService } from '../services/google-maps.service';
+import { SearchButtonComponent } from '../search-button/search-button.component'; 
+
+declare var google: any;
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
-  inputText!: string;
-  responseText!: string;
+export class HomePage implements OnInit {
+  map: any;
 
-  constructor(private backendService: ApiService) {}
+  constructor(private googleMapsService: GoogleMapsService) {}
 
-  sendText() {
-    this.backendService.getProcessedData(this.inputText).subscribe(
-      (response) => {
-        // Verifique se a resposta está no formato esperado e acesse a propriedade correta
-        if (response && response.response) {
-          this.responseText = response.response;
-        } else {
-          this.responseText = 'Resposta inesperada do servidor';
-        }
-      },
-      (error) => {
-        console.error('Erro ao enviar o texto:', error);
-        this.responseText = 'Erro ao enviar o texto';
-      }
-    );
+  async ngOnInit() {
+    const coordinates = await Geolocation.getCurrentPosition();
+    this.googleMapsService.getApiKey().subscribe((response) => {
+      this.loadMap(coordinates.coords.latitude, coordinates.coords.longitude, response.apiKey);
+    });
+  }
+
+  loadMap(lat: number, lng: number, apiKey: string) {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      const mapOptions = {
+        center: { lat, lng },
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+      };
+
+      this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+      const marker = new google.maps.Marker({
+        position: { lat, lng },
+        map: this.map,
+        title: 'Minha Localização',
+      });
+    };
   }
 }

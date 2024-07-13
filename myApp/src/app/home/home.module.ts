@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
+import { SearchButtonComponent } from '../search-button/search-button.component';
 
 import { HomePageRoutingModule } from './home-routing.module';
-
 
 @NgModule({
   imports: [
@@ -14,6 +14,7 @@ import { HomePageRoutingModule } from './home-routing.module';
     IonicModule,
     HomePageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [HomePage,
+    SearchButtonComponent]
 })
 export class HomePageModule {}
