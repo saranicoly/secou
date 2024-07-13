@@ -1,8 +1,9 @@
 from fastapi import FastAPI
-#from elevationAPI import elevation, elevation_along_path
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import os
+from elevationAPI import elevation, elevation_along_path
+from calculate import calculate_route
 
 app = FastAPI()
 
@@ -21,11 +22,7 @@ app.add_middleware(
 
 @app.get("/get_route", status_code=201)
 def send_adresses(start: str, destination: str):
-    return {
-        "R. Acdo. Hélio Ramos": False,
-        "Av. Prof. Artur de Sá": True,
-        "R. Gen. Polidoro": False
-    }
+    return calculate_route(origin, destination)
 
 @app.get("/api/google-maps-api-key")
 async def get_google_maps_api_key():
