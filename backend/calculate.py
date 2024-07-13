@@ -75,6 +75,18 @@ def get_elevation(lat=-8.0514, lng=-34.9459):
     results = elevation(gmaps, loc)
     return results[0]['elevation']
 
+def calculate_probability(weather, elevation):
+    if elevation>100:
+        probability_elevation = 0.1
+    elif elevation<1:
+        probability_elevation = 100
+    else:
+        probability_elevation = 100-elevation
+    
+    probability = weather*0.7 + probability_elevation*0.3
+
+    return probability
+
 def calculate_route(origin, destination):
     now = datetime.now()
 
@@ -87,14 +99,7 @@ def calculate_route(origin, destination):
         weather = get_weather(lat, lng)
         elevation = get_elevation(lat, lng)
 
-        if elevation>100:
-            probability_elevation = 0.1
-        elif elevation<1:
-            probability_elevation = 100
-        else:
-            probability_elevation = 100-elevation
-        
-        probability = weather*0.7 + probability_elevation*0.3
+        probability = calculate_probability(weather, elevation)
 
         if probability>50:
             weather_streets[street] = True
