@@ -19,6 +19,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/get_route", status_code=201)
+def send_adresses(start: str, destination: str):
+    return {
+        "R. Acdo. Hélio Ramos": False,
+        "Av. Prof. Artur de Sá": True,
+        "R. Gen. Polidoro": False
+    }
+
 @app.get("/api/google-maps-api-key")
 async def get_google_maps_api_key():
     api_key = os.environ.get("GCP_KEY")
