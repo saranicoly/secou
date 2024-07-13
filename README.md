@@ -6,8 +6,15 @@
 - Dentro de /backend, utilize o comando `uvicorn main:app --reload` para executar o servidor
 - É possível acessar o Swagger em `http://127.0.0.1:8000/docs` ou o Redoc em `http://127.0.0.1:8000/redoc`
 
-## Frontend
+#### APIs utilizadas:
 
-### Execução
+##### OpenWeather
+- OpenWeather é uma api para obtenção de dados climáticos, os dados retornados por ela são:
+    - weather (clima)
+    - main (temperatura, sensação térmica, minímo e máximo)
+    - clouds (% de nuvens)
+    - rain (volume de chuvas nas últimas 1h e 3h)
+    - visibility (visibilidade)
+    - wind (velocidade e força do vento)
 
-- Depois de iniciado o backend, rodar 'ionic serve', isso vai gerar a página web da nossa aplicação, para rodar o ionic talvez seja necessário instalar algumas bibliotecas, depende da máquina
+Documentação da API: https://openweathermap.org/current
