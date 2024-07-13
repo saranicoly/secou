@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from elevationAPI import elevation, elevation_along_path
+from calculate import calculate_route
 
 app = FastAPI()
 
@@ -9,9 +10,10 @@ async def root():
     return {"message": "Hello World"}
 
 @app.get("/get_route", status_code=201)
-def send_adresses(start: str, destination: str):
-    return {
-        "R. Acdo. Hélio Ramos": False,
-        "Av. Prof. Artur de Sá": True,
-        "R. Gen. Polidoro": False
-    }
+def send_adresses(origin: str, destination: str):
+    streets = calculate_route(origin, destination)
+    response = {}
+    for street in streets:
+        response[street] = False
+    
+    return response
