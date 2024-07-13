@@ -1,0 +1,12 @@
+<div class="expandable-container">
+  <button (click)="toggleExpand()" class="expand-button">
+    Para onde vamos?
+  </button>
+
+  <div *ngIf="isExpanded" class="expandable-content">
+    <input type="text" placeholder="Saída" class="input-field">
+    <input type="text" placeholder="Destino" class="input-field">
+    <input type="text" placeholder="Sair agora" class="input-field">
+    <input type="text" placeholder="Horário" class="input-field">
+  </div>
+</div>
