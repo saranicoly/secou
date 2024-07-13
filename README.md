@@ -18,3 +18,8 @@
     - wind (velocidade e força do vento)
 
 Documentação da API: https://openweathermap.org/current
+
+##### Criterios de Alagamento:
+
+Com relação ao código do openWeather:
+- Se nao for 2xx, 3xx ou 5xx a chance de alagamentos é zero
