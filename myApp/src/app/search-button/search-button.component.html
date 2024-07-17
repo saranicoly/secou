@@ -1,12 +1,12 @@
 <div class="expandable-container">
-  <button (click)="toggleExpand()" class="expand-button">
+  <button (click)="toggleExpand()" class="expand-button" id="botao">
     Para onde vamos?
   </button>
 
   <div *ngIf="isExpanded" class="expandable-content">
-    <input type="text" placeholder="Saída" class="input-field">
-    <input type="text" placeholder="Destino" class="input-field">
-    <input type="text" placeholder="Sair agora" class="input-field">
-    <input type="text" placeholder="Horário" class="input-field">
+    <ion-input id ="input"[(ngModel)]="saidaInput" placeholder="Saída" value></ion-input>
+    <ion-input id ="input" [(ngModel)]="destinoInput" placeholder="Destino"></ion-input>
+    <input id ="input" placeholder="Horário de saída" class="input-field">
+    <ion-button id="submitbutton" expand="full" (click)="sendRoute()">Vamos</ion-button>
   </div>
 </div>
