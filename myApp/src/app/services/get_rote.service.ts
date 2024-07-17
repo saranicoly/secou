@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, numberAttribute } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -10,10 +10,11 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getRoute(saidaInput: string, destinoInput: string): Observable<any> {
+  getRoute(saidaInput: string, destinoInput: string, horaInput: number): Observable<any> {
     return this.http.post<any>(this.apiUrl, {
       saida: saidaInput,
-      destino: destinoInput
+      destino: destinoInput,
+      hora: horaInput
     });
   }
 }
