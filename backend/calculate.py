@@ -60,11 +60,15 @@ def get_geolocation(address):
 
     return {'lat': lat, 'lng': lng}
 
-def get_weather(lat=-8.0514, lng=-34.9459):
-    url = f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid={OPEN_WEATHER_KEY}'
-
+def get_weather(time, lat=-8.0514, lng=-34.9459):
+    url = f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lng}&exclude=alerts&appid={OPEN_WEATHER_KEY}'
     requestReturn = requests.get(url).json()
-    weather_id = requestReturn['weather'][0]['id']
+
+    currentWeather_id = requestReturn['current']['weather'][0]['id']
+    hourlyWeather_id = requestReturn['hourly'][0]['weather'][0]['id']
+    dailyWeather_id = requestReturn['daily'][0]['weather'][0]['id']
+
+    weather_id = currentWeather_id
 
     if weather_id in dados:
         return dados[weather_id]
@@ -87,7 +91,7 @@ def calculate_probability(weather, elevation):
 
     return probability
 
-def calculate_route(origin, destination):
+def calculate_route(origin, destination, time):
     now = datetime.now()
 
     directions_result = gmaps.directions(origin, destination, mode="walking", departure_time=now)
@@ -96,7 +100,7 @@ def calculate_route(origin, destination):
     weather_streets = {}
     for street in directions_result:
         lat, lng = get_geolocation(f'{street}, recife').values()
-        weather = get_weather(lat, lng)
+        weather = get_weather(time, lat, lng)
         elevation = get_elevation(lat, lng)
 
         probability = calculate_probability(weather, elevation)
