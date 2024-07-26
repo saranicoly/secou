@@ -2,6 +2,7 @@ import googlemaps
 import re
 import requests
 import os
+from collections import OrderedDict
 from datetime import datetime
 from elevationAPI import elevation
 
@@ -91,9 +92,11 @@ def calculate_route(origin, destination):
     now = datetime.now()
 
     directions_result = gmaps.directions(origin, destination, mode="walking", departure_time=now)
-    directions_result = set(extract_street_names(directions_result))
+    streets = extract_street_names(directions_result)
+    # Remove duplicates from the streets list, keeping the order
+    directions_result = list(dict.fromkeys(streets).keys())
 
-    weather_streets = {}
+    weather_streets = OrderedDict()
     for street in directions_result:
         lat, lng = get_geolocation(f'{street}, recife').values()
         weather = get_weather(lat, lng)
