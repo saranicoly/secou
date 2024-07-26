@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from elevationAPI import elevation, elevation_along_path
@@ -30,6 +30,13 @@ def send_adresses(request: RouteRequest):
     origin = request.saida
     destination = request.destino
     return calculate_route(origin, destination)
+
+@app.post("/flooding", status_code=200)
+def send_flooding(street: str, level: int, response: Response):
+    if level < 0 or level > 5:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return {"message": "Invalid level"}
+    return {"message": "Flooding data received"}
 
 @app.get("/api/google-maps-api-key")
 async def get_google_maps_api_key():
