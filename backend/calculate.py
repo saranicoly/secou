@@ -3,6 +3,7 @@ import re
 import requests
 import os
 from datetime import datetime, date
+from collections import OrderedDict
 from elevationAPI import elevation
 
 OPEN_WEATHER_KEY = '4715d6e4db67c9bc3c3efaf9199676ff' #os.environ['OPEN_WEATHER_KEY']
@@ -117,9 +118,11 @@ def calculate_route(origin, destination, time):
         departure_time = datetime.fromisoformat(f'{str(date.today())} {time}:00:00.000')
         
     directions_result = gmaps.directions(origin, destination, mode="walking", departure_time=departure_time)
-    directions_result = set(extract_street_names(directions_result))
+    streets = extract_street_names(directions_result)
+    # Remove duplicates from the streets list, keeping the order
+    directions_result = list(dict.fromkeys(streets).keys())
 
-    weather_streets = {}
+    weather_streets = OrderedDict()
     for street in directions_result:
         lat, lng = get_geolocation(f'{street}, recife').values()
         weather = get_weather(time, lat, lng)
