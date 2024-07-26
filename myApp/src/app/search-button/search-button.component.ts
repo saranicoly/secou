@@ -12,7 +12,7 @@ export class SearchButtonComponent implements OnInit{
   address: string = "";
   saidaInput!: string;
   destinoInput!: string;
-  horaInput!: number;
+  time!: number;
 
   constructor(private apiService: ApiService,
     private sharedDataService: SharedDataService
@@ -34,7 +34,7 @@ export class SearchButtonComponent implements OnInit{
   }
 
   sendRoute() {
-    this.apiService.getRoute(this.saidaInput, this.destinoInput, this.horaInput).subscribe(response => {
+    this.apiService.getRoute(this.saidaInput, this.destinoInput, this.time).subscribe(response => {
       console.log('Response:', response);
     }, error => {
       console.error('Error:', error);
