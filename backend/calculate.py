@@ -133,6 +133,3 @@ def calculate_route(origin, destination, time):
             weather_streets[street] = False
 
     return weather_streets
-time = 14
-
-print(type(timed))
