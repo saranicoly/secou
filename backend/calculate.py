@@ -109,9 +109,14 @@ def calculate_probability(weather, elevation):
     return probability
 
 def calculate_route(origin, destination, time):
-    now = datetime.now()
 
-    directions_result = gmaps.directions(origin, destination, mode="walking", departure_time=now)
+    current_hour = int(str(datetime.now()).split(' ')[1].split(':')[0])
+    if int(time) in range(current_hour-2, current_hour+2, 1):
+        departure_time = datetime.now()
+    else:
+        departure_time = datetime.fromisoformat(f'{str(date.today())} {time}:00:00.000')
+        
+    directions_result = gmaps.directions(origin, destination, mode="walking", departure_time=departure_time)
     directions_result = set(extract_street_names(directions_result))
 
     weather_streets = {}
@@ -128,3 +133,6 @@ def calculate_route(origin, destination, time):
             weather_streets[street] = False
 
     return weather_streets
+time = 14
+
+print(type(timed))
