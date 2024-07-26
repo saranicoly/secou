@@ -2,11 +2,11 @@ import googlemaps
 import re
 import requests
 import os
-from datetime import datetime
+from datetime import datetime, date
 from elevationAPI import elevation
 
-OPEN_WEATHER_KEY = os.environ['OPEN_WEATHER_KEY']
-GCP_KEY = os.environ['GCP_API_KEY']
+OPEN_WEATHER_KEY = '4715d6e4db67c9bc3c3efaf9199676ff' #os.environ['OPEN_WEATHER_KEY']
+GCP_KEY = 'AIzaSyCgvw_HvPKWDALPND_TFFD6xQbV7DRNW8E' #os.environ['GCP_API_KEY']
 
 gmaps = googlemaps.Client(key=GCP_KEY)
 
@@ -61,15 +61,32 @@ def get_geolocation(address):
     return {'lat': lat, 'lng': lng}
 
 def get_weather(time, lat=-8.0514, lng=-34.9459):
-    url = f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lng}&exclude=alerts&appid={OPEN_WEATHER_KEY}'
+
+    current_hour = int(str(datetime.now()).split(' ')[1].split(':')[0])
+    if int(time) in range(current_hour-2, current_hour+2, 1):
+        url = f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lng}&exclude=alerts&appid={OPEN_WEATHER_KEY}'
+        requestReturn = requests.get(url).json()
+        weather_id = str(requestReturn['current']['weather'][0]['id'])
+        if weather_id in dados:
+            return dados[weather_id]
+        return 0
+    
+    url = f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lng}&appid={OPEN_WEATHER_KEY}'
+
     requestReturn = requests.get(url).json()
 
-    currentWeather_id = requestReturn['current']['weather'][0]['id']
-    hourlyWeather_id = requestReturn['hourly'][0]['weather'][0]['id']
-    dailyWeather_id = requestReturn['daily'][0]['weather'][0]['id']
+    current_day_data = []
+    for data in requestReturn['list']:
+        if data['dt_txt'].split(' ')[0] == str(date.today()):
+            current_day_data.append(data)
 
-    weather_id = currentWeather_id
+    forecasted_hours = [data['dt_txt'].split(' ')[1].split(':')[0] for data in current_day_data]
+    
+    time_distance = [abs(int(time)-int(hour)) for hour in forecasted_hours]
 
+    index_min_time_distance = time_distance.index(min(time_distance))
+
+    weather_id = str(current_day_data[index_min_time_distance]['weather'][0]['id'])
     if weather_id in dados:
         return dados[weather_id]
     return 0
