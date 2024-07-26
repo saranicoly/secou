@@ -1,46 +1,75 @@
 * {
     padding: 0;
     margin: 0;
+    font-size: 15px;
+    box-sizing: border-box;
 }
 
 .expandable-container{
     position: absolute;
     z-index: 3;
-    top: 10px;
     width: 90%;
     left: 5%;
-    height: 20%;
 }
 
-#input{
-    margin-top:5px;
-    border: 1px solid #ccc;
-    background-color: #fff;
+
+ion-button{
+    --background: #D4D3D3;
+    --background-hover:#D4D3D3;
+    --background-activated: #D4D3D3;
+    --color: black;
+    --border-color: #000;
+    --border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     width: 100%;
+    span{
+        font-size: 15px;
+        text-align: left;
+        width: 100%;
+    }
+}
+
+.input{
+    --placeholder-color: black;
+    --padding-start: 10px;
+    margin-bottom:5px;
+    border: 1px transparent;
+    border-radius: 10px;
+    background-color: #D4D3D3;
     color: black;
 }
 
-#botao{
-    border: 1px solid #ccc;
-    text-align: left;
-    background-color: #fff;
+.horaEnviar{
+    display: flex;
+    flex-direction: row;
+}
+
+
+#inputhora{
+    --placeholder-color: black;
+    --padding-start: 10px;
+    margin-top: 5px;
+    width: 50%;
+    background-color: #D4D3D3;
+    border: 1px transparent;
+    border-radius: 10px;
+}
+
+
+#submitbutton{
+    margin-top: 5px;
+    margin-left: 5%;
+    background-color: #D4D3D3;
+    width: 45%;
     color: black;
-    width: 100%;
-    height: 20%;
+    border: 5px transparent;
+    border-radius: 10px;
     cursor: pointer;
 }
 
-#submitbutton{
-    background-color: #f4f4f4 !important;
-    margin-top: 10px;
-    width: 60%;
-    margin-left: 20%;
-    color: white;
-    border: 5px solid #ccc;
-    border-radius: 10px;
-
-}
-
-#submitbutton:hover{
-    background-color: #f4f4f4;
+#submitbutton:hover {
+    background-color: #BEBEBE; 
+    color: white; 
+    border: 5px solid #A9A9A9; 
 }

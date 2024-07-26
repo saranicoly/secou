@@ -13,4 +13,9 @@ export class GoogleMapsService {
   getApiKey(): Observable<{ apiKey: string }> {
     return this.http.get<{ apiKey: string }>(this.apiUrl);
   }
+
+  getAddress(lat: number, lng: number, apiKey: string) {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+    return this.http.get<any>(url);
+  }
 }
