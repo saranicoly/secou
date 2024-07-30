@@ -10,11 +10,11 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getRoute(saidaInput: string, destinoInput: string, horaInput: number): Observable<any> {
+  getRoute(saidaInput: string, destinoInput: string, time: number): Observable<any> {
     return this.http.post<any>(this.apiUrl, {
       saida: saidaInput,
       destino: destinoInput,
-      hora: horaInput
+      time: time
     });
   }
 }
