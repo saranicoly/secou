@@ -23,13 +23,15 @@ app.add_middleware(
 class RouteRequest(BaseModel):
     saida: str
     destino: str
+    time: str
 
 @app.post("/get_route", status_code=201)
 def send_adresses(request: RouteRequest):
     print(f"Received data: {request}")
     origin = request.saida
     destination = request.destino
-    return calculate_route(origin, destination)
+    time = request.time
+    return calculate_route(origin, destination, time)
 
 @app.post("/flooding", status_code=200)
 def send_flooding(street: str, level: int, response: Response):
