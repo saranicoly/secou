@@ -36,6 +36,7 @@ export class SearchButtonComponent implements OnInit{
   sendRoute() {
     this.apiService.getRoute(this.saidaInput, this.destinoInput, this.time).subscribe(response => {
       console.log('Response:', response);
+      this.sharedDataService.sendRouteStreets(response);
     }, error => {
       console.error('Error:', error);
     });
