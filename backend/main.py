@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 import os
@@ -20,18 +21,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class RouteRequest(BaseModel):
-    saida: str
-    destino: str
-    time: str
-
 @app.post("/get_route", status_code=201)
-def send_adresses(request: RouteRequest):
-    print(f"Received data: {request}")
-    origin = request.saida
-    destination = request.destino
-    time = request.time
-    return calculate_route(origin, destination, time)
+def send_adresses(saida: str, destino: str, time: Optional[int] = None):
+    print(f"Received data: saida={saida}, destino={destino}, time={time}")
+    return calculate_route(saida, destino, time)
 
 @app.post("/flooding", status_code=200)
 def send_flooding(street: str, level: int, response: Response):
