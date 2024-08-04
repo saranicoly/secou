@@ -23,3 +23,13 @@ Documentação da API: https://openweathermap.org/current
 
 Com relação ao código do openWeather:
 - Se nao for 2xx, 3xx ou 5xx a chance de alagamentos é zero
+
+### Frontend
+
+#### Instalação:
+- Primeiramente, é necessário que se tenha o Node.js instalado na máquina. Para isso, acesse o site oficial do [Node.js](https://nodejs.org/pt) e siga as instruções de instalação.
+    - Para verificar se o Node.js foi instalado corretamente, execute o comando `node -v` no terminal. Caso a versão do Node.js seja exibida, a instalação foi bem sucedida.
+- Em seguida, é necessário instalar o Ionic. Para isso, execute o comando `npm install -g @ionic/cli` no terminal.
+
+#### Execução:
+- Tendo o Node.js e o Ionic instalados, acesse a pasta /myApp e execute o comando `ionic serve` no terminal.
