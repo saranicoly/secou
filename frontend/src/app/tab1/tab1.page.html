@@ -13,10 +13,24 @@
     </ion-toolbar>
   </ion-header>
 
+  <div class="map-container">
+    <google-map [height]="'100%'" [width]="'100%'" [center]="center" [zoom]="zoom">
+      <map-marker [position]="center"></map-marker>
+    </google-map>
+  </div>
+
   <div class="search-container">
     <ion-button expand="block" (click)="toggleSearch()" class="search-button">
-      Para onde vamos?
-      <ion-icon name="search-outline" slot="end" style="color: black;"></ion-icon>
+      <ion-grid>
+        <ion-row>
+          <ion-col class="text-left">
+            Para onde vamos?
+          </ion-col>
+          <ion-col class="icon-right">
+            <ion-icon name="search-outline" style="color: black;"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-button>
 
     <div *ngIf="showSearchForm" class="search-form">
@@ -40,6 +54,4 @@
       </ion-button>
     </div>
   </div>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
 </ion-content>
