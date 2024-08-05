@@ -1,6 +1,6 @@
 /* Container do mapa */
 .map-container {
-    height: calc(100vh - 100px); /* Ajusta a altura para deixar espaço para o botão de zoom */
+    height: calc(100vh - 56px); /* Ajusta a altura para deixar espaço para o botão de zoom */
     width: 100%;
     position: relative; /* Garante que o container do mapa seja o contexto para posicionamento absoluto */
 }
@@ -57,4 +57,3 @@
     align-items: center;
     justify-content: flex-end;
 }
-  
