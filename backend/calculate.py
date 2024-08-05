@@ -7,7 +7,7 @@ from collections import OrderedDict
 from elevationAPI import elevation
 
 OPEN_WEATHER_KEY = os.environ['OPEN_WEATHER_KEY']
-GCP_KEY = os.environ['GCP_API_KEY']
+GCP_KEY = os.environ['GCP_KEY']
 
 gmaps = googlemaps.Client(key=GCP_KEY)
 
@@ -121,8 +121,11 @@ def calculate_probability(weather, elevation):
     return probability
 
 def calculate_route(origin, destination, time):
+    if not time:
+        time = datetime.now().hour
 
     current_hour = int(str(datetime.now()).split(' ')[1].split(':')[0])
+
     if int(time) in range(current_hour-2, current_hour+2, 1):
         departure_time = datetime.now()
     else:
