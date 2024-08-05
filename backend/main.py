@@ -22,9 +22,9 @@ app.add_middleware(
 )
 
 @app.post("/get_route", status_code=201)
-def send_adresses(saida: str, destino: str, time: Optional[int] = None):
-    print(f"Received data: saida={saida}, destino={destino}, time={time}")
-    return calculate_route(saida, destino, time)
+def send_adresses(origin: str, destination: str, time: Optional[int] = None):
+    print(f"Received data: origin={origin}, destination={destination}, time={time}")
+    return calculate_route(origin, destination, time)
 
 @app.post("/flooding", status_code=200)
 def send_flooding(street: str, level: int, response: Response):

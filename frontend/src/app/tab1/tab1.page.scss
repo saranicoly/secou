@@ -1,13 +1,60 @@
-.search-container {
-    padding: 16px;
+/* Container do mapa */
+.map-container {
+    height: calc(100vh - 100px); /* Ajusta a altura para deixar espaço para o botão de zoom */
+    width: 100%;
+    position: relative; /* Garante que o container do mapa seja o contexto para posicionamento absoluto */
 }
   
-.search-form {
-    margin-top: 16px;
+/* Container de busca posicionado acima do mapa */
+.search-container {
+    padding: 8px;
+    position: absolute; /* Posiciona o container acima do mapa */
+    top: 56px; /* Ajusta a partir da parte superior, abaixo do cabeçalho */
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Para garantir que o formulário fique sobre o mapa */
 }
-
+  
 .search-button {
     --background: #D4D3D3;
-    --color: black;
+    --color: black; /* Cor do texto do botão */
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+  
+.search-container ion-button {
+    margin-top: 0;
+}
+ 
+.search-container ion-icon {
+    font-size: 24px;
+}
+
+.form-controls {
+    display: flex;
+}
+  
+/* Ajusta a largura do campo Horário e do botão */
+.form-controls ion-item {
+    flex: 1;
+    max-width: 55%;
+}
+
+.btn2 {
+    width: 45%;
+}
+
+/* Ajusta a exibição do botão e do ícone */
+.text-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+  
+.icon-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
   

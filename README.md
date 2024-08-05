@@ -32,4 +32,4 @@ Com relação ao código do openWeather:
 - Em seguida, é necessário instalar o Ionic. Para isso, execute o comando `npm install -g @ionic/cli` no terminal.
 
 #### Execução:
-- Tendo o Node.js e o Ionic instalados, acesse a pasta /myApp e execute o comando `ionic serve` no terminal.
+- Tendo o Node.js e o Ionic instalados, acesse a pasta /frontend e execute o comando `ionic serve` no terminal.
