@@ -13,6 +13,8 @@ export class Tab1Page implements OnInit {
   center!: google.maps.LatLngLiteral;
   zoom: number = 15;
 
+  private geocoder = new google.maps.Geocoder();
+
   constructor() {}
 
   ngOnInit() {
@@ -22,16 +24,35 @@ export class Tab1Page implements OnInit {
   getCurrentLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
         this.center = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
+          lat: latitude,
+          lng: longitude
         };
+
+        this.reverseGeocode(latitude, longitude);
       }, (error) => {
         console.error('Error getting location', error);
       });
     } else {
       console.error('Geolocation is not supported by this browser.');
     }
+  }
+
+  reverseGeocode(lat: number, lng: number) {
+    const latLng = new google.maps.LatLng(lat, lng);
+    
+    this.geocoder.geocode({ location: latLng }, (results, status) => {
+      if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
+        // Obtem o endereço formatado
+        const address = results[0].formatted_address;
+        this.saida = address;
+      } else {
+        console.error('Geocode was not successful for the following reason: ' + status);
+      }
+    });
   }
 
   toggleSearch() {
@@ -42,6 +63,6 @@ export class Tab1Page implements OnInit {
     console.log('Saída:', this.saida);
     console.log('Destino:', this.destino);
     console.log('Horário:', this.horario);
-    // Adicione aqui a lógica para processar a busca
+    // Adicionar aqui a lógica para processar a busca
   }
 }
