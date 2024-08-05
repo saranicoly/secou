@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-tab1',
@@ -15,7 +18,11 @@ export class Tab1Page implements OnInit {
 
   private geocoder = new google.maps.Geocoder();
 
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private dataService: DataService
+  ) {}
 
   ngOnInit() {
     this.getCurrentLocation();
@@ -46,7 +53,6 @@ export class Tab1Page implements OnInit {
     
     this.geocoder.geocode({ location: latLng }, (results, status) => {
       if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
-        // Obtem o endereço formatado
         const address = results[0].formatted_address;
         this.saida = address;
       } else {
@@ -60,9 +66,26 @@ export class Tab1Page implements OnInit {
   }
 
   onSearch() {
-    console.log('Saída:', this.saida);
-    console.log('Destino:', this.destino);
-    console.log('Horário:', this.horario);
-    // Adicionar aqui a lógica para processar a busca
+    const params = new HttpParams()
+      .set('origin', this.saida)
+      .set('destination', this.destino)
+
+      if (this.horario) {
+        params.set('time', this.horario.replace(':', ''));
+      }
+
+    this.http.post('http://localhost:8000/get_route', null, { params })
+      .subscribe(
+        (response: any) => {
+          console.log('Response from backend:', response);
+          this.dataService.setData(response); // Salva os dados no serviço
+
+          // Vai para a Tab2
+          this.router.navigateByUrl('/tabs/tab2');
+        },
+        error => {
+          console.error('Error sending request:', error);
+        }
+      );
   }
 }
