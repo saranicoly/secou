@@ -42,16 +42,18 @@
       <ion-item>
         <ion-label position="floating">Destino</ion-label>
         <ion-input [(ngModel)]="destino"></ion-input>
-      </ion-item>
+      </ion-item> 
+      
+      <div class="form-controls">
+        <ion-item>
+          <ion-label position="floating">Horário</ion-label>
+          <ion-input [(ngModel)]="horario" type="time"></ion-input>
+        </ion-item>
+        <ion-button expand="full" (click)="onSearch()" class="btn2">
+          Vamos!
+        </ion-button>
+      </div>
 
-      <ion-item>
-        <ion-label position="floating">Horário</ion-label>
-        <ion-input [(ngModel)]="horario" type="time"></ion-input>
-      </ion-item>
-
-      <ion-button expand="block" (click)="onSearch()">
-        Vamos!
-      </ion-button>
     </div>
   </div>
 </ion-content>

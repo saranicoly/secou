@@ -31,6 +31,20 @@
     font-size: 24px;
 }
 
+.form-controls {
+    display: flex;
+}
+  
+/* Ajusta a largura do campo Horário e do botão */
+.form-controls ion-item {
+    flex: 1;
+    max-width: 55%;
+}
+
+.btn2 {
+    width: 45%;
+}
+
 /* Ajusta a exibição do botão e do ícone */
 .text-left {
     display: flex;
