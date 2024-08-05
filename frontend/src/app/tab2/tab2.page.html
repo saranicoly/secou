@@ -6,12 +6,34 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+<ion-content>
+  <div class="popup-container" *ngIf="showPopup">
+    <div class="popup">
+      <p>VOCÊ ESTÁ EM:</p>
+      <h2>Rua Antônio Eduardo Amorim</h2>
+      <p>Qual o nível da água?</p>
+      <div class="buttons">
+        <button ion-button (click)="selectLevel(1)">
+          <img src="assets\nivel1.png" alt="Nível 1">
+        </button>
+        <button ion-button (click)="selectLevel(2)">
+          <img src="assets\nivel2.png" alt="Nível 2">
+        </button>
+        <button ion-button (click)="selectLevel(3)">
+          <img src="assets\nivel3.png" alt="Nível 3">
+        </button>
+        <button ion-button (click)="selectLevel(4)">
+          <img src="assets\nivel4.png" alt="Nível 4">
+        </button>
+        <button ion-button (click)="selectLevel(5)">
+          <img src="assets\nivel5.png" alt="Nível 5">
+        </button>
+      </div>
+      <a (click)="selectLevel(0)">Não sei ou não quero informar</a>
+    </div>
+  </div>
+  <div class="selected-level" *ngIf="!showPopup">
+    <p>VOCÊ ESTÁ EM:</p>
+    <p>Rua Antônio Eduardo Amorim</p>
+  </div>
 </ion-content>

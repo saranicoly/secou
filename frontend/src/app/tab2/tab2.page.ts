@@ -7,6 +7,13 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
+  showPopup: boolean = true;
+
   constructor() {}
 
+  selectLevel(level: number) {
+    this.showPopup = false;
+    // Você pode adicionar mais lógica aqui se necessário
+    console.log(`Nível selecionado: ${level}`);
+  }
 }
