@@ -104,13 +104,21 @@ export class Tab2Page implements OnInit {
 
     waypoints = this.reduceWaypoints(waypoints);
     console.log(waypoints);
-
+    /*var directionsResult: google.maps.DirectionsResult = {
+      request: {
+        origin: this.receivedData[1][0]['legs'][0]['start_location'],
+        destination: this.receivedData[1][0]['legs'][0]['end_location'],
+        //waypoints: waypoints,
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      routes: this.receivedData[1],
+    };*/
     directionsService.route(
       {
         origin: this.receivedData[1][0]['legs'][0]['start_location'],
         destination: this.receivedData[1][0]['legs'][0]['end_location'],
         waypoints: waypoints,
-        travelMode: google.maps.TravelMode.DRIVING
+        travelMode: google.maps.TravelMode.WALKING
       },
       (result, status) => {
         console.log(`status ${status}`);
