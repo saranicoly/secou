@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services/data.service'; // Ajuste o caminho conforme necessário
 import { GoogleMap, MapDirectionsService } from '@angular/google-maps';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 
 @Component({
   selector: 'app-tab2',
@@ -18,6 +19,8 @@ export class Tab2Page implements OnInit {
   active: boolean;
   flag: boolean;
   mapVisible:boolean = true;
+  markers: any[];
+  selectedMarkerInfo = '';
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private directionsService: MapDirectionsService) {}
 
@@ -59,6 +62,11 @@ export class Tab2Page implements OnInit {
       list.splice(randomIndex, 1);
     }
     return list;
+  }
+
+  openInfoWindow(marker:any, infoWindow: any) {
+    this.selectedMarkerInfo = marker.info;
+    infoWindow.open(marker.marker);
   }
 
   async calculateAndDisplayRoute(): Promise<void> {
@@ -115,5 +123,33 @@ export class Tab2Page implements OnInit {
         }
       }
     );
+
+    for (const step of stepsList) {
+      this.markers.push({
+        position: step['end_location'],
+        label: { color: 'red', text: `Marker ${this.markers.length+1}` },
+        title: `Marker ${this.markers.length+1}`,
+        info: `Information about Marker ${this.markers.length+1}`,
+        options: { animation: google.maps.Animation.DROP }
+      });
+    };
+    
+    /*markers = [
+    {
+      position: { lat: 24, lng: 12 },
+      label: { color: 'red', text: 'Marker 1' },
+      title: 'Marker 1',
+      info: 'Information about Marker 1',
+      options: { animation: google.maps.Animation.DROP }
+    },
+    {
+      position: { lat: 25, lng: 13 },
+      label: { color: 'blue', text: 'Marker 2' },
+      title: 'Marker 2',
+      info: 'Information about Marker 2',
+      options: { animation: google.maps.Animation.DROP }
+    }
+  ];*/
+
   }
 }
