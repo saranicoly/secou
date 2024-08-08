@@ -48,9 +48,19 @@ export class Tab2Page implements OnInit {
     this.mapVisible = true;
     await this.delay(0);
   }
+  
   delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+  reduceWaypoints<T>(list: T[]): T[] {
+    while (list.length > 24) {
+      const randomIndex = Math.floor(Math.random() * list.length);
+      list.splice(randomIndex, 1);
+    }
+    return list;
+  }
+
   async calculateAndDisplayRoute(): Promise<void> {
     await this.refreshMap();
     
@@ -60,10 +70,38 @@ export class Tab2Page implements OnInit {
     console.log(this.receivedData[1][0]['legs'][0]['start_location']);
     console.log(this.receivedData[1][0]['legs'][0]['end_location']);
 
+    let waypoints = [];
+    
+    const stepsList = this.receivedData[1][0]['legs'][0]['steps'];
+    for (const step of stepsList) {
+      waypoints.push({
+        location: step['end_location'],
+        stopover: false
+      });
+    };
+    
+    /*interface MyDictionary {
+      [key: string]: any;
+    }
+
+    const stepsList = Object.values(this.receivedData[2]);
+    for (const step of stepsList) {
+      const myStep = step as MyDictionary; 
+      waypoints.push({
+        location: { lat: myStep['lat'], lng: myStep['lng'] },//step,
+        stopover: false
+      });
+    };
+    console.log(waypoints);*/
+
+    waypoints = this.reduceWaypoints(waypoints);
+    console.log(waypoints);
+
     directionsService.route(
       {
         origin: this.receivedData[1][0]['legs'][0]['start_location'],
         destination: this.receivedData[1][0]['legs'][0]['end_location'],
+        waypoints: waypoints,
         travelMode: google.maps.TravelMode.DRIVING
       },
       (result, status) => {
