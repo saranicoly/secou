@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services/data.service'; // Ajuste o caminho conforme necessário
+import { GoogleMap, MapDirectionsService } from '@angular/google-maps';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -7,12 +9,73 @@ import { DataService } from '../services/data.service'; // Ajuste o caminho conf
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page implements OnInit {
-  receivedData: any;
+  @ViewChild(GoogleMap) map: GoogleMap;
 
-  constructor(private dataService: DataService) {}
+  receivedData: any;
+  center!: google.maps.LatLngLiteral;
+  zoom: number = 15;
+  directionsRenderer: google.maps.DirectionsResult;
+  active: boolean;
+  flag: boolean;
+  mapVisible:boolean = true;
+
+  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private directionsService: MapDirectionsService) {}
 
   ngOnInit() {
-    this.receivedData = this.dataService.getData();
-    console.log("Dados recebidos da tab1: ", this.receivedData);
+    this.route.params.subscribe(params => {
+      this.receivedData = this.dataService.getData();
+      this.flag = this.dataService.getFlag();
+      this.dataService.setFlag(false);
+      console.log("Dados recebidos da tab1: ", this.receivedData);
+      this.center = {
+        lat: -8.122056,
+        lng: -34.970135
+      };
+      if (this.active && this.flag){
+        this.calculateAndDisplayRoute();
+      }
+    });
+    this.active = true;
+  }
+
+  ngAfterViewInit(): void {
+    this.calculateAndDisplayRoute();
+  }
+
+  async refreshMap(): Promise<void> {
+    this.mapVisible = false; 
+    await this.delay(0);
+    this.mapVisible = true;
+    await this.delay(0);
+  }
+  delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  async calculateAndDisplayRoute(): Promise<void> {
+    await this.refreshMap();
+    
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(this.map.googleMap!);
+    console.log(this.receivedData[1][0]['legs'][0]['start_location']);
+    console.log(this.receivedData[1][0]['legs'][0]['end_location']);
+
+    directionsService.route(
+      {
+        origin: this.receivedData[1][0]['legs'][0]['start_location'],
+        destination: this.receivedData[1][0]['legs'][0]['end_location'],
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      (result, status) => {
+        console.log(`status ${status}`);
+        console.log(`result ${result}`);
+        console.log(`mapVisible ${this.mapVisible}`);
+        if (status === 'OK' && result) {
+          directionsRenderer.setDirections(result);
+        } else {
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
   }
 }

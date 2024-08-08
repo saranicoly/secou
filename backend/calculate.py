@@ -38,15 +38,26 @@ def extract_street_names(directions_result):
     for step in directions_result[0]['legs'][0]['steps']:
         instructions = step.get('html_instructions', '')
         if instructions:
-            parts = instructions.split(' on ')
-            if len(parts) > 1:
+            #parts = instructions.split(' on ')
+            names = re.findall(padrao, instructions)
+            coords = ['north', 'south', 'east', 'west', 'right', 'left']
+            
+            for name in names:
+                flag = True
+                for coord in coords:
+                    if coord in name:
+                        flag = False
+                if flag:
+                    street_names.append(name)
+            
+            '''if len(parts) > 1:
                 names = re.findall(padrao, parts[1]) # Remove any HTML tags after the street name
                 for name in names:
                     street_names.append(name)
             else:
                 parts = instructions.split(' toward ')
                 names = re.findall(padrao, parts[0]) # Get the last part before the HTML tag
-                street_names.append(names[-1])
+                street_names.append(names[-1])'''
 
     return street_names
 
@@ -131,11 +142,10 @@ def calculate_route(origin, destination, time):
     else:
         departure_time = datetime.fromisoformat(f'{str(date.today())} {time}:00:00.000')
         
-    directions_result = gmaps.directions(origin, destination, mode="walking", departure_time=departure_time)
-    streets = extract_street_names(directions_result)
+    directions_result_raw = gmaps.directions(origin, destination, mode="walking", departure_time=departure_time)
+    streets = extract_street_names(directions_result_raw)
     # Remove duplicates from the streets list, keeping the order
     directions_result = list(dict.fromkeys(streets).keys())
-
     weather_streets = OrderedDict()
     for street in directions_result:
         lat, lng = get_geolocation(f'{street}, recife').values()
@@ -149,4 +159,4 @@ def calculate_route(origin, destination, time):
         else:
             weather_streets[street] = False
 
-    return weather_streets
+    return (weather_streets, directions_result_raw)
