@@ -25,23 +25,21 @@ export class Tab2Page implements OnInit {
   zoom: number = 15;
   directionsRenderer: google.maps.DirectionsResult;
   active: boolean;
-  flag: boolean;
+  flag: boolean; //flag que indica que o redirecionamento veio da pagina 1 (isso indica que o mapa vai ter que ser refeito e a rota calculada)
   mapVisible:boolean = true;
   markers: MarkerProperties[] = [];
   selectedMarkerInfo = '';
 
-  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private directionsService: MapDirectionsService) {}
+  constructor(private dataService: DataService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.receivedData = this.dataService.getData();
       this.flag = this.dataService.getFlag();
-      this.dataService.setFlag(false);
+      this.dataService.setFlag(false); //Seta a flag que indica que o fluxo veio da pagina 1 como falso
+      this.center = this.dataService.getCenter();
       console.log("Dados recebidos da tab1: ", this.receivedData);
-      this.center = {
-        lat: -8.122056,
-        lng: -34.970135
-      };
+      
       if (this.active && this.flag){
         this.calculateAndDisplayRoute();
       }
@@ -54,7 +52,7 @@ export class Tab2Page implements OnInit {
   }
 
   async refreshMap(): Promise<void> {
-    this.markers = []
+    this.markers = [] //Reinicializa os marcadores
     this.mapVisible = false; 
     await this.delay(0);
     this.mapVisible = true;
@@ -78,19 +76,20 @@ export class Tab2Page implements OnInit {
   }
 
   async calculateAndDisplayRoute(): Promise<void> {
-    await this.refreshMap();
+    await this.refreshMap(); //Recarrega um novo mapa
     
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer();
     directionsRenderer.setMap(this.map.googleMap!);
-    console.log(this.receivedData[1][0]['legs'][0]['start_location']);
-    console.log(this.receivedData[1][0]['legs'][0]['end_location']);
 
+    /*IMPLEMENTACAO DOS WAYPOINTS PARA GARANTIR QUE A ROTA NO FRONT PASSE PELOS PONTOS DA ROTA DO BACK
+    
     let waypoints = [];
     
     const stepsList = this.receivedData[1][0]['legs'][0]['steps'];
     const streetsGeolocation = this.receivedData[2]
     const streetsFloodStatus = this.receivedData[0]
+    
     for (const step of Object.values(streetsGeolocation)) {
       waypoints.push({
         location: step as google.maps.LatLngLiteral,
@@ -98,21 +97,18 @@ export class Tab2Page implements OnInit {
       });
     };
     
-
     waypoints = this.reduceWaypoints(waypoints);
-    console.log(waypoints);
+    console.log(waypoints);*/
     
+    //Faz a requisicao da rota (O TravelMode deve ser o mesmo usado no back) usando o start_location e o end_location da rota do back
     directionsService.route(
       {
         origin: this.receivedData[1][0]['legs'][0]['start_location'],
         destination: this.receivedData[1][0]['legs'][0]['end_location'],
-        waypoints: waypoints,
+        //waypoints: waypoints,
         travelMode: google.maps.TravelMode.WALKING
       },
       (result, status) => {
-        console.log(`status ${status}`);
-        console.log(`result ${result}`);
-        console.log(`mapVisible ${this.mapVisible}`);
         if (status === 'OK' && result) {
           directionsRenderer.setDirections(result);
         } else {
@@ -121,6 +117,8 @@ export class Tab2Page implements OnInit {
       }
     );
 
+    /*IMPLEMENTAÇÃO DOS MARCADORES
+    
     for (const street of Object.keys(streetsGeolocation)) {
       this.markers.push({
         position: streetsGeolocation[street],
@@ -129,7 +127,7 @@ export class Tab2Page implements OnInit {
         info: `Marker ${this.markers.length+1} - Street ${street}`,
         options: { animation: google.maps.Animation.DROP }
       });
-    };
+    };*/
 
   }
 }
