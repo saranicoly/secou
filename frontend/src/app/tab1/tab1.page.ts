@@ -79,6 +79,8 @@ export class Tab1Page implements OnInit {
         (response: any) => {
           console.log('Response from backend:', response);
           this.dataService.setData(response); // Salva os dados no serviço
+          this.dataService.setFlag(true); //Seta a flag que indica que a navegacao para a tab2 vai ser realizada
+          this.dataService.setCenter(this.center); //Salva a localizacao atual
 
           // Vai para a Tab2
           this.router.navigateByUrl('/tabs/tab2');
