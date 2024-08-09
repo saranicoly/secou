@@ -4,6 +4,14 @@ import { GoogleMap, MapDirectionsService } from '@angular/google-maps';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 
+interface MarkerProperties {
+  position: { lat: number, lng: number },
+  label: { color: string, text: string },
+  title: string,
+  info: string,
+  options: { animation: google.maps.Animation }
+};
+
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
@@ -19,7 +27,7 @@ export class Tab2Page implements OnInit {
   active: boolean;
   flag: boolean;
   mapVisible:boolean = true;
-  markers: any[];
+  markers: MarkerProperties[] = [];
   selectedMarkerInfo = '';
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private directionsService: MapDirectionsService) {}
@@ -46,6 +54,7 @@ export class Tab2Page implements OnInit {
   }
 
   async refreshMap(): Promise<void> {
+    this.markers = []
     this.mapVisible = false; 
     await this.delay(0);
     this.mapVisible = true;
@@ -65,8 +74,7 @@ export class Tab2Page implements OnInit {
   }
 
   openInfoWindow(marker:any, infoWindow: any) {
-    this.selectedMarkerInfo = marker.info;
-    infoWindow.open(marker.marker);
+    window.alert("Informacoes sobre o ponto de alagamento")
   }
 
   async calculateAndDisplayRoute(): Promise<void> {
@@ -81,38 +89,19 @@ export class Tab2Page implements OnInit {
     let waypoints = [];
     
     const stepsList = this.receivedData[1][0]['legs'][0]['steps'];
-    for (const step of stepsList) {
+    const streetsGeolocation = this.receivedData[2]
+    const streetsFloodStatus = this.receivedData[0]
+    for (const step of Object.values(streetsGeolocation)) {
       waypoints.push({
-        location: step['end_location'],
+        location: step as google.maps.LatLngLiteral,
         stopover: false
       });
     };
     
-    /*interface MyDictionary {
-      [key: string]: any;
-    }
-
-    const stepsList = Object.values(this.receivedData[2]);
-    for (const step of stepsList) {
-      const myStep = step as MyDictionary; 
-      waypoints.push({
-        location: { lat: myStep['lat'], lng: myStep['lng'] },//step,
-        stopover: false
-      });
-    };
-    console.log(waypoints);*/
 
     waypoints = this.reduceWaypoints(waypoints);
     console.log(waypoints);
-    /*var directionsResult: google.maps.DirectionsResult = {
-      request: {
-        origin: this.receivedData[1][0]['legs'][0]['start_location'],
-        destination: this.receivedData[1][0]['legs'][0]['end_location'],
-        //waypoints: waypoints,
-        travelMode: google.maps.TravelMode.DRIVING
-      },
-      routes: this.receivedData[1],
-    };*/
+    
     directionsService.route(
       {
         origin: this.receivedData[1][0]['legs'][0]['start_location'],
@@ -132,32 +121,15 @@ export class Tab2Page implements OnInit {
       }
     );
 
-    for (const step of stepsList) {
+    for (const street of Object.keys(streetsGeolocation)) {
       this.markers.push({
-        position: step['end_location'],
-        label: { color: 'red', text: `Marker ${this.markers.length+1}` },
+        position: streetsGeolocation[street],
+        label: { color: streetsFloodStatus[street]?'blue':'green', text: `Marker ${this.markers.length+1}` },
         title: `Marker ${this.markers.length+1}`,
-        info: `Information about Marker ${this.markers.length+1}`,
+        info: `Marker ${this.markers.length+1} - Street ${street}`,
         options: { animation: google.maps.Animation.DROP }
       });
     };
-    
-    /*markers = [
-    {
-      position: { lat: 24, lng: 12 },
-      label: { color: 'red', text: 'Marker 1' },
-      title: 'Marker 1',
-      info: 'Information about Marker 1',
-      options: { animation: google.maps.Animation.DROP }
-    },
-    {
-      position: { lat: 25, lng: 13 },
-      label: { color: 'blue', text: 'Marker 2' },
-      title: 'Marker 2',
-      info: 'Information about Marker 2',
-      options: { animation: google.maps.Animation.DROP }
-    }
-  ];*/
 
   }
 }
