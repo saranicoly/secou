@@ -7,15 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class FloodService {
 
-  private apiUrl = '/flooding';
-
   constructor(private http: HttpClient) { }
 
-  sendFlood(streetName: string, level: number): Observable<any> {
-    const data = {
-      streetName: streetName,
-      level: level
-    };
-    return this.http.post(this.apiUrl, data);
+  sendFlood(payload: { street: string, level: number }): Observable<any> {
+    return this.http.post('http://localhost:8000/flooding', payload);
   }
 }

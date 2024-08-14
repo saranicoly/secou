@@ -1,17 +1,32 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <div id="map" style="height: 100%;"></div>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgvw_HvPKWDALPND_TFFD6xQbV7DRNW8E">
+</script>
+<ion-content [fullscreen]="true">
+  <div class="proxrua">
+    Vire em: {{proximaRua}}
+  </div>
+  <div class="map-container" *ngIf="mapVisible">
+    <google-map [height]="'100%'" [width]="'100%'" [center]="center" [zoom]="zoom">
+      <map-marker [position]="center"></map-marker>
+      <!-- MARCADORES NO MAPA
+      <map-marker
+        *ngFor="let marker of markers"
+        [position]="marker.position"
+        [label]="marker.label"
+        [title]="marker.title"
+        [options]="marker.options"
+        (mapClick)="openInfoWindow(marker, infoWindow)">
+      </map-marker>
+      <map-info-window #infoWindow>
+        {{ selectedMarkerInfo }}
+      </map-info-window>-->
+    </google-map>
+  </div>
+  <!--<app-explore-container name="Tab 2 page">*ngIf="mapVisible"</app-explore-container>-->
   <div class="popup-container" *ngIf="showPopup">
     <div class="popup">
       <p>VOCÊ ESTÁ EM:</p>
-      <h2>Rua Antônio Eduardo Amorim</h2>
+      <h2>{{ruaAtual}}</h2>
       <p>Qual o nível da água?</p>
       <div class="buttons">
         <button ion-button (click)="selectLevel(1)">
@@ -35,6 +50,7 @@
   </div>
   <div class="selected-level" *ngIf="!showPopup">
     <p>VOCÊ ESTÁ EM:</p>
-    <p>Rua Antônio Eduardo Amorim</p>
+    <p>{{ruaAtual}}</p>
   </div>
 </ion-content>
+
