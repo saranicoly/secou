@@ -8,9 +8,8 @@ import { FloodService } from '../services/flood.service';
 interface MarkerProperties {
   position: { lat: number, lng: number },
   label: { color: string, text: string },
-  title: string,
   info: string,
-  options: { animation: google.maps.Animation }
+  icon: any
 };
 
 @Component({
@@ -92,7 +91,7 @@ export class Tab2Page implements OnInit {
     const directionsRenderer = new google.maps.DirectionsRenderer();
     directionsRenderer.setMap(this.map.googleMap!);
 
-    /*IMPLEMENTACAO DOS WAYPOINTS PARA GARANTIR QUE A ROTA NO FRONT PASSE PELOS PONTOS DA ROTA DO BACK
+    //IMPLEMENTACAO DOS WAYPOINTS PARA GARANTIR QUE A ROTA NO FRONT PASSE PELOS PONTOS DA ROTA DO BACK
     
     let waypoints = [];
     
@@ -100,7 +99,7 @@ export class Tab2Page implements OnInit {
     const streetsGeolocation = this.receivedData[2]
     const streetsFloodStatus = this.receivedData[0]
     
-    for (const step of Object.values(streetsGeolocation)) {
+    /*for (const step of Object.values(streetsGeolocation)) {
       waypoints.push({
         location: step as google.maps.LatLngLiteral,
         stopover: false
@@ -127,17 +126,18 @@ export class Tab2Page implements OnInit {
       }
     );
 
-    /*IMPLEMENTAÇÃO DOS MARCADORES
-    
+    //IMPLEMENTAÇÃO DOS MARCADORES
+    const image = '..\\..\\assets\\floaded_point.png'
     for (const street of Object.keys(streetsGeolocation)) {
       this.markers.push({
         position: streetsGeolocation[street],
         label: { color: streetsFloodStatus[street]?'blue':'green', text: `Marker ${this.markers.length+1}` },
-        title: `Marker ${this.markers.length+1}`,
+        //title: `Marker ${this.markers.length+1}`,
         info: `Marker ${this.markers.length+1} - Street ${street}`,
-        options: { animation: google.maps.Animation.DROP }
+        //options: { animation: google.maps.Animation.DROP }
+        icon: image
       });
-    };*/
+    };
 
   }
 
