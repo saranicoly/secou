@@ -74,7 +74,7 @@ export class Tab1Page implements OnInit {
         params.set('time', this.horario.replace(':', ''));
       }
 
-    this.http.post('http://localhost:8000/get_route', null, { params })
+    this.http.post('https://secou-backend.onrender.com/get_route', null, { params })
       .subscribe(
         (response: any) => {
           console.log('Response from backend:', response);

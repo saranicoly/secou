@@ -10,6 +10,6 @@ export class FloodService {
   constructor(private http: HttpClient) { }
 
   sendFlood(payload: { street: string, level: number }): Observable<any> {
-    return this.http.post('http://localhost:8000/flooding', payload);
+    return this.http.post('https://secou-backend.onrender.com/flooding', payload);
   }
 }
