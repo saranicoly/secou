@@ -3,6 +3,7 @@ import { DataService } from '../services/data.service'; // Ajuste o caminho conf
 import { GoogleMap, MapDirectionsService } from '@angular/google-maps';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { FloodService } from '../services/flood.service';
 
 interface MarkerProperties {
   position: { lat: number, lng: number },
@@ -19,7 +20,11 @@ interface MarkerProperties {
 })
 export class Tab2Page implements OnInit {
   @ViewChild(GoogleMap) map: GoogleMap;
-
+  showPopup: boolean = true;
+  ruaAtual!: string;
+  proximoPasso!: any;
+  proximaRuaList: string[] = [];
+  proximaRua!: string;
   receivedData: any;
   center!: google.maps.LatLngLiteral;
   zoom: number = 15;
@@ -30,11 +35,15 @@ export class Tab2Page implements OnInit {
   markers: MarkerProperties[] = [];
   selectedMarkerInfo = '';
 
-  constructor(private dataService: DataService, private route: ActivatedRoute) {}
+  constructor(private dataService: DataService, private route: ActivatedRoute, private floodService : FloodService) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.receivedData = this.dataService.getData();
+      this.ruaAtual = this.receivedData[1][0]['legs'][0]['start_address'].split(',')[0];
+      this.proximoPasso = this.receivedData[1][0]['legs'][0]['steps'][1];
+      this.proximaRuaList = this.extractTextsBetweenTags(this.proximoPasso.html_instructions, 'b');
+      this,this.proximaRua = this.proximaRuaList[1];
       this.flag = this.dataService.getFlag();
       this.dataService.setFlag(false); //Seta a flag que indica que o fluxo veio da pagina 1 como falso
       this.center = this.dataService.getCenter();
@@ -47,6 +56,7 @@ export class Tab2Page implements OnInit {
     this.active = true;
   }
 
+  
   ngAfterViewInit(): void {
     this.calculateAndDisplayRoute();
   }
@@ -129,5 +139,27 @@ export class Tab2Page implements OnInit {
       });
     };*/
 
+  }
+
+  selectLevel(level: number) {
+    this.showPopup = false;
+    const payload = { street: this.ruaAtual, level: level };
+    this.floodService.sendFlood(payload).subscribe(response => {
+    console.log('Response:', response);
+    }, error => {
+    console.error('Error:', error);
+    });
+  }
+
+  extractTextsBetweenTags(html: string, tag: string): string[] {
+    const regex = new RegExp(`<${tag}>(.*?)<\/${tag}>`, 'g');
+    const matches: string[] = [];
+    let match;
+
+    while ((match = regex.exec(html)) !== null) {
+      matches.push(match[1]);
+    }
+
+    return matches;
   }
 }
