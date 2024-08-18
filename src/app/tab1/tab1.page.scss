@@ -25,6 +25,10 @@
   
 .search-container ion-button {
     margin-top: 0;
+    display: flex;
+    justify-content: space-between; /* Garante que o texto e o ícone estejam corretamente alinhados */
+    align-items: center;
+    white-space: nowrap; /* Impede que o texto quebre linha */
 }
  
 .search-container ion-icon {
