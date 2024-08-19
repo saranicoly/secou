@@ -1,0 +1,42 @@
+.header-container {
+    display: flex;
+    justify-content: space-between; /* Distribui as imagens entre as extremidades e o centro */
+    align-items: center; /* Centraliza verticalmente as imagens */
+    width: 100%; /* Ocupa toda a largura do header */
+    /* padding: 0 16px; Adiciona um pouco de espaço nas laterais */
+    background-color: white;
+}
+
+.ion-header {
+    border: none;
+    box-shadow: none;
+}
+
+.toolbar-container {
+    padding: 0; 
+    border: 0; 
+    margin: 0; 
+    background-color: white;
+}
+
+  .header-image {
+    height: 40px; /* Ajusta a altura conforme necessário */
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .left-image {
+    margin-right: auto; /* Empurra a imagem central e a da direita para longe */
+  }
+  
+  .center-image {
+    margin: 0 auto; /* Centraliza a imagem no meio */
+    height: 50%;
+    width: 25%;
+  }
+  
+  .right-image {
+    margin-left: auto; /* Empurra a imagem central e a da esquerda para longe */
+  }

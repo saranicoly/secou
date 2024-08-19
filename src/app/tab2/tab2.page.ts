@@ -4,6 +4,7 @@ import { GoogleMap, MapDirectionsService } from '@angular/google-maps';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { FloodService } from '../services/flood.service';
+import { AlertController } from '@ionic/angular';
 
 interface MarkerProperties {
   position: { lat: number, lng: number },
@@ -34,7 +35,7 @@ export class Tab2Page implements OnInit {
   markers: MarkerProperties[] = [];
   selectedMarkerInfo = '';
 
-  constructor(private dataService: DataService, private route: ActivatedRoute, private floodService : FloodService) {}
+  constructor(private dataService: DataService, private route: ActivatedRoute, private floodService : FloodService, private alertController: AlertController) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -80,8 +81,14 @@ export class Tab2Page implements OnInit {
     return list;
   }
 
-  openInfoWindow(marker:any, infoWindow: any) {
-    window.alert("Informacoes sobre o ponto de alagamento")
+  async openInfoWindow(marker: any, infoWindow: any) {
+    const alert = await this.alertController.create({
+      header: 'Informações Adicionais',
+      message: 'Ainda não há informações sobre o nível de alagamento para este ponto.',
+      buttons: ['OK']
+    });
+  
+    await alert.present();
   }
 
   async calculateAndDisplayRoute(): Promise<void> {
