@@ -16,6 +16,7 @@ export class Tab1Page implements OnInit {
   horario!: string;
   center!: google.maps.LatLngLiteral;
   zoom: number = 15;
+  hasError: boolean = false;
 
   private geocoder = new google.maps.Geocoder();
 
@@ -75,6 +76,8 @@ export class Tab1Page implements OnInit {
     });
   
     await alert.present();
+    await alert.onDidDismiss();
+    this.hasError = false;
   }
   onSearch() {
     const params = new HttpParams()
@@ -98,6 +101,7 @@ export class Tab1Page implements OnInit {
         },
         error => {
           console.error('Error sending request:', error);
+          this.hasError = true;
           this.errorSearching();
         }
       );
