@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -21,7 +22,8 @@ export class Tab1Page implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private dataService: DataService
+    private dataService: DataService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -65,6 +67,15 @@ export class Tab1Page implements OnInit {
     this.showSearchForm = !this.showSearchForm;
   }
 
+  async errorSearching() {
+    const alert = await this.alertController.create({
+      header: 'Rota não encontrada',
+      message: 'A rota especificada não foi encontrada, tente novamente.',
+      buttons: ['OK']
+    });
+  
+    await alert.present();
+  }
   onSearch() {
     const params = new HttpParams()
       .set('origin', this.saida)
@@ -87,6 +98,7 @@ export class Tab1Page implements OnInit {
         },
         error => {
           console.error('Error sending request:', error);
+          this.errorSearching();
         }
       );
   }
