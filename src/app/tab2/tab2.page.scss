@@ -21,6 +21,12 @@
   margin-top: 16px;
 }
 
+@media (prefers-color-scheme: dark) {
+  .info {
+      color: black;
+  }
+}
+
 .buttons button {
   background: none;
   border: none;

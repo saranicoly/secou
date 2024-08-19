@@ -8,26 +8,24 @@
   <div class="map-container" *ngIf="mapVisible">
     <google-map [height]="'100%'" [width]="'100%'" [center]="center" [zoom]="zoom">
       <map-marker [position]="center"></map-marker>
-      <!-- MARCADORES NO MAPA
+      <!-- MARCADORES NO MAPA-->
       <map-marker
         *ngFor="let marker of markers"
         [position]="marker.position"
-        [label]="marker.label"
-        [title]="marker.title"
-        [options]="marker.options"
+        [icon]="marker.icon"
         (mapClick)="openInfoWindow(marker, infoWindow)">
       </map-marker>
       <map-info-window #infoWindow>
         {{ selectedMarkerInfo }}
-      </map-info-window>-->
+      </map-info-window>
     </google-map>
   </div>
   <!--<app-explore-container name="Tab 2 page">*ngIf="mapVisible"</app-explore-container>-->
   <div class="popup-container" *ngIf="showPopup">
     <div class="popup">
-      <p>VOCÊ ESTÁ EM:</p>
-      <h2>{{ruaAtual}}</h2>
-      <p>Qual o nível da água?</p>
+      <p class="info">VOCÊ ESTÁ EM:</p>
+      <h2 class="info" >{{ruaAtual}}</h2>
+      <p class="info">Qual o nível da água?</p>
       <div class="buttons">
         <button ion-button (click)="selectLevel(1)">
           <img src="assets\nivel1.png" alt="Nível 1">
