@@ -86,7 +86,7 @@ export class Tab2Page implements OnInit {
 
   async calculateAndDisplayRoute(): Promise<void> {
     await this.refreshMap(); //Recarrega um novo mapa
-    
+    console.log(this.ruaAtual);
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer();
     directionsRenderer.setMap(this.map.googleMap!);
@@ -98,16 +98,6 @@ export class Tab2Page implements OnInit {
     const stepsList = this.receivedData[1][0]['legs'][0]['steps'];
     const streetsGeolocation = this.receivedData[2]
     const streetsFloodStatus = this.receivedData[0]
-    
-    /*for (const step of Object.values(streetsGeolocation)) {
-      waypoints.push({
-        location: step as google.maps.LatLngLiteral,
-        stopover: false
-      });
-    };
-    
-    waypoints = this.reduceWaypoints(waypoints);
-    console.log(waypoints);*/
     
     //Faz a requisicao da rota (O TravelMode deve ser o mesmo usado no back) usando o start_location e o end_location da rota do back
     directionsService.route(
@@ -129,14 +119,14 @@ export class Tab2Page implements OnInit {
     //IMPLEMENTAÇÃO DOS MARCADORES
     const image = '..\\..\\assets\\floaded_point.png'
     for (const street of Object.keys(streetsGeolocation)) {
-      this.markers.push({
-        position: streetsGeolocation[street],
-        label: { color: streetsFloodStatus[street]?'blue':'green', text: `Marker ${this.markers.length+1}` },
-        //title: `Marker ${this.markers.length+1}`,
-        info: `Marker ${this.markers.length+1} - Street ${street}`,
-        //options: { animation: google.maps.Animation.DROP }
-        icon: image
-      });
+      if (streetsFloodStatus[street]) {
+        this.markers.push({
+          position: streetsGeolocation[street],
+          label: { color: streetsFloodStatus[street]?'blue':'green', text: `Marker ${this.markers.length+1}` },
+          info: `Marker ${this.markers.length+1} - Street ${street}`,
+          icon: image
+        });
+      }
     };
 
   }

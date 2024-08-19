@@ -23,9 +23,9 @@
   <!--<app-explore-container name="Tab 2 page">*ngIf="mapVisible"</app-explore-container>-->
   <div class="popup-container" *ngIf="showPopup">
     <div class="popup">
-      <p>VOCÊ ESTÁ EM:</p>
-      <h2>{{ruaAtual}}</h2>
-      <p>Qual o nível da água?</p>
+      <p class="info">VOCÊ ESTÁ EM:</p>
+      <h2 class="info" >{{ruaAtual}}</h2>
+      <p class="info">Qual o nível da água?</p>
       <div class="buttons">
         <button ion-button (click)="selectLevel(1)">
           <img src="assets\nivel1.png" alt="Nível 1">
