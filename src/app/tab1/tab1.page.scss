@@ -9,7 +9,7 @@
 .search-container {
     padding: 8px;
     position: absolute; /* Posiciona o container acima do mapa */
-    top: 56px; /* Ajusta a partir da parte superior, abaixo do cabeçalho */
+    top: 70px; /* Ajusta a partir da parte superior, abaixo do cabeçalho */
     left: 0;
     right: 0;
     z-index: 1000; /* Para garantir que o formulário fique sobre o mapa */
@@ -21,32 +21,41 @@
     padding: 0;
     margin: 0;
     border: none;
+    height: 40px; /* Ajuste a altura do botão conforme necessário */
 }
-  
+
 .search-container ion-button {
     margin-top: 0;
     display: flex;
     justify-content: space-between; /* Garante que o texto e o ícone estejam corretamente alinhados */
     align-items: center;
     white-space: nowrap; /* Impede que o texto quebre linha */
+    height: 40px; /* Ajusta a altura do botão */
+    font-size: 14px; /* Ajusta o tamanho da fonte */
 }
- 
+
 .search-container ion-icon {
-    font-size: 24px;
+    font-size: 20px; /* Ajusta o tamanho do ícone */
 }
 
 .form-controls {
     display: flex;
+    flex-direction: column; /* Garante que os itens fiquem em coluna */
 }
-  
+
 /* Ajusta a largura do campo Horário e do botão */
 .form-controls ion-item {
     flex: 1;
-    max-width: 55%;
+    max-width: 100%; /* Garante que os itens não excedam a largura do container */
+    margin-bottom: 8px; /* Adiciona um espaço entre os itens */
 }
 
 .btn2 {
-    width: 45%;
+    width: 100%; /* Ajusta o botão para ocupar toda a largura do container */
+    height: 40px; /* Ajusta a altura do botão */
+    font-size: 14px; /* Ajusta o tamanho da fonte do botão */
+    --padding-start: 16px; /* Adiciona um padding ao botão */
+    --padding-end: 16px; /* Adiciona um padding ao botão */
 }
 
 /* Ajusta a exibição do botão e do ícone */

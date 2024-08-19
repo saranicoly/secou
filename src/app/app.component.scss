@@ -3,8 +3,8 @@
     justify-content: space-between; /* Distribui as imagens entre as extremidades e o centro */
     align-items: center; /* Centraliza verticalmente as imagens */
     width: 100%; /* Ocupa toda a largura do header */
-    /* padding: 0 16px; Adiciona um pouco de espaço nas laterais */
     background-color: white;
+    height: 60px; /* Ajusta a altura conforme necessário */
 }
 
 .ion-header {
@@ -20,7 +20,7 @@
 }
 
   .header-image {
-    height: 40px; /* Ajusta a altura conforme necessário */
+    height: 60px; /* Ajusta a altura conforme necessário */
     border: none;
     box-shadow: none;
     margin: 0;
